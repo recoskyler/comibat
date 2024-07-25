@@ -15,7 +15,7 @@ from shutil import rmtree
 import sys
 import click
 
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 is_verbose = False
 skipped = 0
@@ -361,7 +361,7 @@ def process_file(file, overwrite, output_path):
     @param output_path: The output directory.
     """
 
-    global skipped, successful
+    global skipped, successful, failed
 
     print_verbose(f'\nProcessing {file}...')
 
@@ -370,7 +370,7 @@ def process_file(file, overwrite, output_path):
     if not check_for_meta(extracted_path):
         print_verbose(f'No ComicInfo.xml found in {extracted_path}. Skipping...')
 
-        skipped += 1
+        failed += 1
 
         return
 
@@ -384,6 +384,8 @@ def process_file(file, overwrite, output_path):
 
         set_title_page(extracted_path, image_files)
         compress_to_cbz(extracted_path, output_path, overwrite)
+    else:
+        skipped += 1
 
     delete_extracted_path(extracted_path)
 
