@@ -4,7 +4,7 @@
 
 <a href='https://ko-fi.com/recoskyler' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-A tool to add a title page to CBZ comic book archives if it doesn't already exist.
+A tool to add a title page to CBZ comic book archives if it doesn't already exist. It uses the first image file in the archive as the title page, and also adds a Pages node with all the other pages to the `ComicInfo.xml` file during the process.
 
 **This tool works only with CBZ files, as CBR and CB7 files are not supported and proprietary.**
 
