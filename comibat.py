@@ -14,7 +14,7 @@ from tempfile import gettempdir
 from shutil import rmtree
 import click
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 def get_last_folder_name(extracted_path):
     """
@@ -325,13 +325,14 @@ def process_file(file, overwrite, output_path):
     image_files = get_image_files(extracted_path)
 
     if output_path == '':
-        output_path = get_folder_name(extracted_path)
+        output_path = get_folder_name(file)
 
     if not check_for_title_page(extracted_path):
         print(f'No title page found in {extracted_path}. Setting one...')
-        set_title_page(extracted_path, image_files)
 
-    compress_to_cbz(extracted_path, output_path, overwrite)
+        set_title_page(extracted_path, image_files)
+        compress_to_cbz(extracted_path, output_path, overwrite)
+
     delete_extracted_path(extracted_path)
 
     print(f'Done processing {file}')
