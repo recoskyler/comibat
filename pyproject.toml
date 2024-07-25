@@ -7,7 +7,7 @@ comibat = "comibat.__main__:cli"
 
 [project]
 name = "comibat"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="Adil Atalay Hamamcioglu", email="38231748+recoskyler@users.noreply.github.com" },
 ]
