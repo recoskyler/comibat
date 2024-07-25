@@ -1,20 +1,31 @@
+"""
+This module provides functionality to parse XML, handle file paths,
+compress files into CBZ format, and manage temporary files and directories.
+It is used by the main module to perform the actual processing.
+It adds a title page to CBZ files and optionally converts them to EPUB.
+"""
+
+from xml.dom.minidom import parseString
+from os.path import join
+from os import getcwd, remove, walk
+from zipfile import ZipFile, ZIP_DEFLATED
+from pathlib import Path
+from tempfile import gettempdir
+from shutil import rmtree
 import click
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 def compress_to_cbz(extracted_path, output_path, overwrite):
-    from zipfile import ZipFile, ZIP_DEFLATED
-    import os
-
     print(f'Compressing {extracted_path} to CBZ...')
 
     name = get_file_name(extracted_path) if overwrite else get_file_name(extracted_path) + ' (FIXED)'
-    zip_name = os.path.join(output_path, name + '.cbz')
+    zip_name = join(output_path, name + '.cbz')
 
     with ZipFile(zip_name, 'w', ZIP_DEFLATED) as zip_ref:
-        for folder_name, subfolders, filenames in os.walk(extracted_path):
+        for folder_name, _sub_folders, filenames in walk(extracted_path):
             for filename in filenames:
-                file_path = os.path.join(folder_name, filename)
+                file_path = join(folder_name, filename)
                 zip_ref.write(file_path, arcname=filename)
 
                 print(f'Added {file_path} to {zip_name}')
@@ -29,8 +40,6 @@ def get_file_name(file):
 
 
 def check_for_meta(extracted_path):
-    from pathlib import Path
-
     print(f'Checking for ComicInfo.xml in {extracted_path}...')
 
     for path in Path(extracted_path).rglob('ComicInfo.xml'):
@@ -44,14 +53,11 @@ def check_for_meta(extracted_path):
 
 
 def check_for_title_page(extracted_path):
-    from xml.dom.minidom import parseString
-    from os.path import join
-
     comic_info_path = join(extracted_path, 'ComicInfo.xml')
 
     print(f'Checking for title page in {comic_info_path}...')
 
-    with open(comic_info_path, 'r') as file:
+    with open(comic_info_path, 'r', encoding='utf-8') as file:
         xml = file.read()
 
     dom = parseString(xml)
@@ -67,14 +73,11 @@ def check_for_title_page(extracted_path):
 
 
 def set_title_page(extracted_path, image_files):
-    from xml.dom.minidom import parseString
-    from os.path import join
-
     comic_info_path = join(extracted_path, 'ComicInfo.xml')
 
     print(f'Setting title page in {comic_info_path}...')
 
-    with open(comic_info_path, 'r') as file:
+    with open(comic_info_path, 'r', encoding='utf-8') as file:
         xml = file.read()
 
     dom = parseString(xml)
@@ -125,15 +128,13 @@ def set_title_page(extracted_path, image_files):
 
     # Write the modified XML to a file
 
-    with open(comic_info_path, 'w') as file:
+    with open(comic_info_path, 'w', encoding='utf-8') as file:
         file.write(dom.toxml())
 
     print(f'Saved updated {comic_info_path}')
 
 
 def get_image_files(extracted_path):
-    from pathlib import Path
-
     print(f'Getting image files in {extracted_path}...')
 
     files = []
@@ -153,36 +154,27 @@ def get_image_files(extracted_path):
 
 
 def delete_extracted_path(extracted_path):
-    import shutil
-
     print(f'Deleting {extracted_path}...')
 
-    shutil.rmtree(extracted_path)
+    rmtree(extracted_path)
 
     print(f'Done deleting {extracted_path}')
 
 
 def extract_cbz(file):
-    from tempfile import gettempdir
-    from zipfile import ZipFile
-    from pathlib import Path
-    import os
-
     print(f'Extracting {file}...')
 
     name = get_file_name(file)
     temp_dir = Path(gettempdir())
-    extracted_path = os.path.join(temp_dir, name)
+    extracted_path = join(temp_dir, name)
 
-    zip = ZipFile(file)
-    zip.extractall(path=extracted_path)
+    zip_file = ZipFile(file)
+    zip_file.extractall(path=extracted_path)
 
     return extracted_path
 
 
 def get_cbz_files(directory):
-    from pathlib import Path
-
     print('Getting CBZ files...')
 
     files = []
@@ -221,8 +213,6 @@ def process_file(file, overwrite):
 @click.option('--delete-cbz', is_flag=True, default=False, help='Delete CBZ files after conversion', show_default=True)
 @click.argument('files', type=click.Path(exists=True), nargs=-1)
 def main(files, overwrite, to_epub, version, delete_cbz):
-    from os import getcwd, remove
-
     print(f'ComiBat v{__version__}')
     print('by recoskyler - 2024')
     print('--------------------')
