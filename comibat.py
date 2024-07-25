@@ -340,7 +340,7 @@ def process_file(file, overwrite, output_path):
 @click.command(help='A tool to add a title page to CBZ comic book archives. If no files are specified, ComiBat will look for CBZ files in the current directory if no files are specified.')
 @click.option('--overwrite', is_flag=True, default=False, help='Overwrite existing files', show_default=True)
 @click.option('--version', is_flag=True, default=False, help='Show version', show_default=True)
-@click.option('-o', '--output-path', type=click.Path(exists=True), default=getcwd(), help='Output directory', show_default=True)
+@click.option('-o', '--output-path', type=click.Path(exists=True, file_okay=False), default=getcwd(), help='Output directory', show_default=True)
 @click.option('-r', '--recursive', is_flag=True, default=False, help='Recursively search for CBZ files', show_default=True)
 @click.argument('files', type=click.Path(exists=True, dir_okay=False), nargs=-1)
 def cli(files, overwrite, version, output_path, recursive):
