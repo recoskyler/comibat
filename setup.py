@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='comibat',
-    version='0.1.3',
+    version='0.1.4',
     py_modules=['comibat'],
     install_requires=[
         'Click',
