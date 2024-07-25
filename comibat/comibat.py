@@ -14,7 +14,7 @@ from tempfile import gettempdir
 from shutil import rmtree
 import click
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 def compress_to_cbz(extracted_path, output_path, overwrite):
     print(f'Compressing {extracted_path} to CBZ...')
@@ -212,7 +212,7 @@ def process_file(file, overwrite):
 @click.option('--version', is_flag=True, default=False, help='Show version', show_default=True)
 @click.option('--delete-cbz', is_flag=True, default=False, help='Delete CBZ files after conversion', show_default=True)
 @click.argument('files', type=click.Path(exists=True), nargs=-1)
-def main(files, overwrite, to_epub, version, delete_cbz):
+def cli(files, overwrite, to_epub, version, delete_cbz):
     print(f'ComiBat v{__version__}')
     print('by recoskyler - 2024')
     print('--------------------')

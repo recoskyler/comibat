@@ -3,11 +3,11 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-comibat = "comibat.__main__:cli"
+comibat = "comibat:cli"
 
 [project]
 name = "comibat"
-version = "0.1.1"
+version = "0.1.2"
 authors = [
   { name="Adil Atalay Hamamcioglu", email="38231748+recoskyler@users.noreply.github.com" },
 ]
