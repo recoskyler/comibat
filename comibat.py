@@ -32,7 +32,7 @@ def delete_last_line():
     sys.stdout.write('\x1b[2K')
 
 
-def print_progress(file_name, file_count):
+def print_progress(file_count):
     """
     Prints a progress message.
 
@@ -47,7 +47,7 @@ def print_progress(file_name, file_count):
     print(f'Successful: {successful}')
     print(f'Skipped: {skipped}')
     print(f'Failed: {failed}')
-    print(f'Processing {successful + failed + skipped + 1}/{file_count} file {file_name}...')
+    print(f'Processing {successful + failed + skipped + 1}/{file_count}...')
 
 
 def print_verbose(message):
@@ -437,7 +437,7 @@ def cli(files, overwrite, version, output_path, recursive, verbose):
 
     for file in files:
         try:
-            print_progress(file, len(files))
+            print_progress(len(files))
             process_file(file, overwrite, output_path)
         except Exception as e:
             print(f'Error processing {file}: {e}')
